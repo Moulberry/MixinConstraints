@@ -67,5 +67,11 @@ public class MixinMinecraft {
 }
 ```
 
+Some constraints support version ranges, which can be used like so:
+```java
+@IfModLoaded(value = "modernfix", minVersion = "5.11", maxVersion = "5.15")
+```
+The version comparison uses Fabric API's [Version](https://github.com/FabricMC/fabric-loader/blob/master/src/main/java/net/fabricmc/loader/api/Version.java). Ensure the version resembles a semver string in order for range comparison to work as expected.
+
 # License
 The library is available under the MIT license.
