@@ -1,5 +1,8 @@
 package com.moulberry.mixinconstraints.checker;
 
+import com.moulberry.mixinconstraints.MixinConstraints;
+import com.moulberry.mixinconstraints.abstraction.FabricAbstractions;
+import com.moulberry.mixinconstraints.abstraction.ForgeLikeAbstractions;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
@@ -8,7 +11,6 @@ import net.fabricmc.loader.api.VersionParsingException;
 import java.util.Optional;
 
 public class ConstraintChecker {
-
     /**
      * Check if *ANY* of the modIds provided are loaded
      */
@@ -34,7 +36,11 @@ public class ConstraintChecker {
     }
 
     public static boolean checkDevEnvironment() {
-        return FabricLoader.getInstance().isDevelopmentEnvironment();
+        return switch(MixinConstraints.LOADER) {
+            case FABRIC -> FabricAbstractions.checkDevEnvironment();
+            case FORGE, NEOFORGE -> ForgeLikeAbstractions.checkDevEnvironment();
+            case UNKNOWN -> false;
+        };
     }
 
     public static boolean checkMinecraftVersion(String minVersion, String maxVersion) {
