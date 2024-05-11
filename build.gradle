@@ -1,0 +1,85 @@
+plugins {
+	id 'fabric-loom' version '1.6-SNAPSHOT'
+    id "com.vanniktech.maven.publish" version "0.28.0"
+}
+
+version = "1.0.0"
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+    maven {
+        url = "https://jitpack.io"
+    }
+    mavenCentral()
+}
+
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    manifest {
+        attributes(
+            "Fabric-Loom-Remap": "true"
+        )
+    }
+}
+
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SonatypeHost
+
+mavenPublishing {
+    configure(new JavaLibrary(new JavadocJar.Javadoc(), true))
+
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    signAllPublications()
+
+    coordinates("com.moulberry", "mixinconstraints", version)
+
+    pom {
+        name = 'MixinConstraints'
+        description = 'Library to enable/disable mixins using annotations'
+        url = "https://github.com/Moulberry/MixinConstraints"
+
+        licenses {
+            license {
+                name = 'MIT License'
+                url = 'https://opensource.org/license/mit'
+            }
+        }
+        developers {
+            developer {
+                name = 'Moulberry'
+            }
+        }
+        scm {
+            url = "https://github.com/Moulberry/MixinConstraints/"
+            connection = "scm:git:git://github.com/Moulberry/MixinConstraints.git"
+            developerConnection = "scm:git:ssh://git@github.com/Moulberry/MixinConstraints.git"
+        }
+    }
+}
