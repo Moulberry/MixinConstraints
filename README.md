@@ -1,12 +1,14 @@
 # MixinConstraints
 
 A library to enable/disable mixins using annotations.
+
 Annotations can be applied to mixin classes to toggle the whole mixin, or individual fields/methods for more precision.
 
 # Installing
 
-MixinConstraints is available through Maven Central
-The library currently only supports Fabric
+MixinConstraints is available through Maven Central.
+
+The library currently only supports Fabric.
 
 __Gradle__
 ```groovy
@@ -17,7 +19,7 @@ dependencies {
 
 Next, you will need to bootstrap the library to affect your mixins.
 
-The easiest way is using the built-in Mixin Plugin by adding the following to your modid.mixins.json:
+The easiest way to do so is by using the provided Mixin Plugin by adding the following to your modid.mixins.json:
 ```json
 {
     "plugin": "com.moulberry.mixinconstraints.ConstraintsMixinPlugin",
