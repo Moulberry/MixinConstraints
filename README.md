@@ -13,7 +13,7 @@ The library currently only supports Fabric.
 __Gradle__
 ```groovy
 dependencies {
-    include(implementation("com.moulberry:mixinconstraints:1.0.0"))
+    include(implementation("com.moulberry:mixinconstraints:1.0.1"))
 }
 ```
 
