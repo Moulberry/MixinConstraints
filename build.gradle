@@ -1,28 +1,33 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
     id "com.vanniktech.maven.publish" version "0.28.0"
+    id "java"
 }
 
-version = "1.0.0"
-group = project.maven_group
-
-base {
-	archivesName = project.archives_base_name
-}
+version = "1.0.1"
+group = "com.moulberry.mixinconstraints"
 
 repositories {
     maven {
         url = "https://jitpack.io"
     }
+    maven {
+        url = "https://maven.fabricmc.net/"
+    }
+    maven {
+        url = "https://repo.spongepowered.org/maven/"
+    }
     mavenCentral()
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // General
+    compileOnly "org.spongepowered:mixin:0.8"
+    compileOnly "org.ow2.asm:asm-debug-all:5.2"
+    compileOnly "io.github.llamalad7:mixinextras-fabric:0.3.5"
+    implementation 'org.slf4j:slf4j-api:2.0.9'
 
+    // Platform-specific
+    compileOnly "net.fabricmc:fabric-loader:0.14.25"
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -37,14 +42,6 @@ java {
 
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
-}
-
-jar {
-    manifest {
-        attributes(
-            "Fabric-Loom-Remap": "true"
-        )
-    }
 }
 
 import com.vanniktech.maven.publish.JavaLibrary
