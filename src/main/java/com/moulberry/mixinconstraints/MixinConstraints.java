@@ -12,7 +12,8 @@ import java.io.IOException;
 public class MixinConstraints {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("mixinconstraints");
-    public static boolean VERBOSE = "true".equals(System.getProperty("mixinconstraints.verbose"));
+    public static final boolean VERBOSE = "true".equals(System.getProperty("mixinconstraints.verbose"));
+    public static final Loader LOADER = getLoader();
 
     public static boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         try {
@@ -40,4 +41,27 @@ public class MixinConstraints {
         }
     }
 
+    private static Loader getLoader() {
+        if (doesClassExist("net.fabricmc.loader.api.FabricLoader"))
+            return Loader.FABRIC;
+        if (doesClassExist("net.minecraftforge.fml.loading.FMLLoader"))
+            return Loader.FORGE;
+        if (doesClassExist("net.neoforged.fml.loading.FMLLoader"))
+            return Loader.NEOFORGE;
+
+        return Loader.UNKNOWN;
+    }
+
+    private static boolean doesClassExist(String className) {
+        try {
+            Class.forName(className, false, MixinConstraints.class.getClassLoader());
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
+    public enum Loader {
+        FORGE, NEOFORGE, FABRIC, UNKNOWN
+    }
 }
