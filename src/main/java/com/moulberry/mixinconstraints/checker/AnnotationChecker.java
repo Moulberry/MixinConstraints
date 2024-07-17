@@ -22,7 +22,9 @@ public class AnnotationChecker {
             IF_DEV_ENVIRONMENT_DESC.equals(node.desc) || IF_MINECRAFT_VERSION_DESC.equals(node.desc);
     }
 
-    public static boolean checkAnnotationNode(AnnotationNode node) {
+
+    @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "DuplicatedCode"})
+	public static boolean checkAnnotationNode(AnnotationNode node) {
         if (IF_MOD_LOADED_DESC.equals(node.desc)) {
             String value = getAnnotationValue(node, "value", "");
             if (value.isEmpty()) throw new IllegalArgumentException("modid must not be empty");
@@ -83,27 +85,13 @@ public class AnnotationChecker {
         return true;
     }
 
+    @SuppressWarnings("unchecked")
     private static <T> T getAnnotationValue(AnnotationNode annotation, String key, T defaultValue) {
-        boolean getNextValue = false;
-        boolean skipNextValue = false;
+        if (annotation.values == null) return defaultValue;
 
-        if (annotation == null || annotation.values == null) {
-            return defaultValue;
-        }
-
-        // Keys and value are stored in successive pairs, search for the key and if found return the following entry
-        for (Object value : annotation.values) {
-            if (skipNextValue) {
-                skipNextValue = false;
-                continue;
-            }
-            if (getNextValue) {
-                return (T) value;
-            }
-            if (value.equals(key)) {
-                getNextValue = true;
-            } else {
-                skipNextValue = true;
+        for (int i = 0; i < annotation.values.size(); i += 2) {
+            if (key.equals(annotation.values.get(i))) {
+                return (T) annotation.values.get(i + 1);
             }
         }
 

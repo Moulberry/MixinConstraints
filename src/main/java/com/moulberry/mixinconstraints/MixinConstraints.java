@@ -15,7 +15,7 @@ public class MixinConstraints {
     public static final boolean VERBOSE = "true".equals(System.getProperty("mixinconstraints.verbose"));
     public static final Loader LOADER = getLoader();
 
-    public static boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+    public static boolean shouldApplyMixin(String mixinClassName) {
         try {
             // Use classNode instead of Class.forName to avoid loading at the wrong time
             ClassNode classNode = MixinService.getService().getBytecodeProvider().getClassNode(mixinClassName);
