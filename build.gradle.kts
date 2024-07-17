@@ -1,10 +1,17 @@
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
-    id("com.vanniktech.maven.publish") version("0.28.0")
     id("java")
+    id("idea")
+    id("com.vanniktech.maven.publish") version("0.28.0")
 }
 
 version = "1.0.1"
 group = "com.moulberry.mixinconstraints"
+
+idea.module.isDownloadSources = true
 
 repositories {
     mavenCentral()
@@ -50,5 +57,38 @@ tasks.register<Jar>("sourcesJar") {
     archiveClassifier.set("sources")
     sourceSets.map { it.allSource }.forEach {
         from(it)
+    }
+}
+
+mavenPublishing {
+    configure(JavaLibrary(JavadocJar.Javadoc(), true))
+
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    signAllPublications()
+
+    coordinates("com.moulberry", "mixinconstraints", version.toString())
+
+    pom {
+        name = "MixinConstraints"
+        description = "Library to enable/disable mixins using annotations"
+        url = "https://github.com/Moulberry/MixinConstraints"
+
+        licenses {
+            license {
+                name = "MIT License"
+                url = "https://opensource.org/license/mit"
+            }
+        }
+        developers {
+            developer {
+                name = "Moulberry"
+            }
+        }
+        scm {
+            url = "https://github.com/Moulberry/MixinConstraints/"
+            connection = "scm:git:git://github.com/Moulberry/MixinConstraints.git"
+            developerConnection = "scm:git:ssh://git@github.com/Moulberry/MixinConstraints.git"
+        }
     }
 }
