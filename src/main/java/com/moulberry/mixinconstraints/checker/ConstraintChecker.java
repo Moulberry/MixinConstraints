@@ -1,6 +1,6 @@
 package com.moulberry.mixinconstraints.checker;
 
-import com.moulberry.mixinconstraints.Abstractions;
+import com.moulberry.mixinconstraints.util.Abstractions;
 
 public class ConstraintChecker {
     /**

@@ -1,5 +1,6 @@
 package com.moulberry.mixinconstraints;
 
+import com.moulberry.mixinconstraints.util.Abstractions;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;

@@ -1,4 +1,6 @@
-package com.moulberry.mixinconstraints;
+package com.moulberry.mixinconstraints.util;
+
+import com.moulberry.mixinconstraints.MixinConstraints;
 
 public abstract class Abstractions {
 	private static final Abstractions instance;

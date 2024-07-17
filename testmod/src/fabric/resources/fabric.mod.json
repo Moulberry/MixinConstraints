@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "testmod",
+  "version": "${version}",
+
+  "name": "MixinConstraints Test Mod",
+  "description": "A test mod for MixinConstraints",
+  "authors": [ "Moulberry" ],
+  "contact": {
+    "homepage": "https://github.com/Moulberry/MixinConstraints",
+    "sources": "https://github.com/Moulberry/MixinConstraints"
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [ "com.moulberry.mixinconstraints.testmod.TestModFabric" ]
+  },
+  "mixins": [ "testmod.mixins.json" ],
+
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.20.6",
+    "java": ">=17"
+  }
+}

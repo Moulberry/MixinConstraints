@@ -1,5 +1,6 @@
 package com.moulberry.mixinconstraints;
 
+import com.moulberry.mixinconstraints.util.Abstractions;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.Restriction;

@@ -1,7 +1,7 @@
 package com.moulberry.mixinconstraints.mixin;
 
-import com.llamalad7.mixinextras.lib.apache.commons.tuple.Pair;
-import com.llamalad7.mixinextras.utils.MixinInternals;
+import com.moulberry.mixinconstraints.MixinConstraints;
+import com.moulberry.mixinconstraints.util.Pair;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -26,9 +26,9 @@ public class ConstraintsMixinExtension implements IExtension {
 
     @Override
     public void preApply(ITargetClassContext context) {
-        for (Pair<IMixinInfo, ClassNode> pair : MixinInternals.getMixinsFor(context)) {
-            if (pair.getLeft().getConfig().getMixinPackage().equals(this.mixinPackage)) {
-                MixinTransformer.transform(pair.getLeft(), pair.getRight());
+        for (Pair<IMixinInfo, ClassNode> pair : MixinConstraints.getMixinsFor(context)) {
+            if (pair.first().getConfig().getMixinPackage().equals(this.mixinPackage)) {
+                MixinTransformer.transform(pair.first(), pair.second());
             }
         }
     }

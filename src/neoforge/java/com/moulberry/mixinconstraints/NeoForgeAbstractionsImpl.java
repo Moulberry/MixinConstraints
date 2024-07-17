@@ -1,5 +1,6 @@
 package com.moulberry.mixinconstraints;
 
+import com.moulberry.mixinconstraints.util.Abstractions;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import org.apache.maven.artifact.versioning.ArtifactVersion;

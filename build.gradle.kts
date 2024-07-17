@@ -3,8 +3,8 @@ import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
-    id("java")
-    id("idea")
+    java
+    idea
     id("com.vanniktech.maven.publish") version("0.28.0")
 }
 
@@ -12,6 +12,12 @@ version = "1.0.1"
 group = "com.moulberry.mixinconstraints"
 
 idea.module.isDownloadSources = true
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
 
 repositories {
     mavenCentral()
