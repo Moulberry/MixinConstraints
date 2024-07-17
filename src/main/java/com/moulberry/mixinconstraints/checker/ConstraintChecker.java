@@ -28,7 +28,7 @@ public class ConstraintChecker {
     }
 
     public static boolean checkDevEnvironment() {
-        return !Abstractions.isDevelopmentEnvironment();
+        return Abstractions.isDevelopmentEnvironment();
     }
 
     public static boolean checkMinecraftVersion(String minVersion, String maxVersion) {

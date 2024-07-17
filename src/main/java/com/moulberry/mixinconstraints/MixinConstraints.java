@@ -55,16 +55,18 @@ public class MixinConstraints {
     private static final MethodHandle STATE_CLASS_NODE;
 
     static {
-        MethodHandles.Lookup lookup = MethodHandles.lookup();
-
         try {
             Class<?> TargetClassContext = Class.forName("org.spongepowered.asm.mixin.transformer.TargetClassContext");
+            MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(TargetClassContext, MethodHandles.lookup());
             TARGET_CLASS_CONTEXT_MIXINS = lookup.findGetter(TargetClassContext, "mixins", SortedSet.class);
 
             Class<?> MixinInfo = Class.forName("org.spongepowered.asm.mixin.transformer.MixinInfo");
             Class<?> MixinInfo$State = Class.forName("org.spongepowered.asm.mixin.transformer.MixinInfo$State");
 
+            lookup = MethodHandles.privateLookupIn(MixinInfo, MethodHandles.lookup());
             MIXIN_INFO_GET_STATE = lookup.findVirtual(MixinInfo, "getState", MethodType.methodType(MixinInfo$State));
+
+            lookup = MethodHandles.privateLookupIn(MixinInfo$State, MethodHandles.lookup());
             STATE_CLASS_NODE = lookup.findGetter(MixinInfo$State, "classNode", ClassNode.class);
 
         } catch (Throwable e) {

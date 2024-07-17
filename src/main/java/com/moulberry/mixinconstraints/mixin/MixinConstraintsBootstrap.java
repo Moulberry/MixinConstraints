@@ -23,9 +23,9 @@ public class MixinConstraintsBootstrap {
     private static final MethodHandle setActiveExtensions;
 
     static {
-        MethodHandles.Lookup lookup = MethodHandles.lookup();
-
         try {
+            MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(Extensions.class, MethodHandles.lookup());
+
             getExtensions = lookup.findGetter(Extensions.class, "extensions", List.class);
             getActiveExtensions = lookup.findGetter(Extensions.class, "activeExtensions", List.class);
             setActiveExtensions = lookup.findSetter(Extensions.class, "activeExtensions", List.class);

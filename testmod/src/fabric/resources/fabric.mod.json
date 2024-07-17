@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "testmod",
-  "version": "${version}",
+  "version": "1.0.0",
 
   "name": "MixinConstraints Test Mod",
   "description": "A test mod for MixinConstraints",

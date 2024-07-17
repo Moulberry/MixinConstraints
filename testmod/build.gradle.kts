@@ -1,4 +1,5 @@
 import xyz.wagyourtail.unimined.api.unimined
+import xyz.wagyourtail.unimined.util.OSUtils
 
 plugins {
     java
@@ -25,10 +26,11 @@ val neoforge: SourceSet by sourceSets.creating {
 
 dependencies {
     implementation("org.spongepowered:mixin:0.8.5")
-    implementation(rootProject)
+    implementation(rootProject.sourceSets["main"].output)
 }
 
 unimined.minecraft(sourceSets["main"]) {
+    combineWith(rootProject.sourceSets["main"])
     version = "1.20.6"
 
     mappings {
@@ -51,6 +53,7 @@ unimined.minecraft(sourceSets["main"]) {
 
 unimined.minecraft(fabric) {
     combineWith(sourceSets["main"])
+    combineWith(rootProject.sourceSets["fabric"])
 
     fabric {
         loader("0.15.11")
@@ -61,17 +64,27 @@ unimined.minecraft(fabric) {
 
 unimined.minecraft(forge) {
     combineWith(sourceSets["main"])
+    combineWith(rootProject.sourceSets["forge"])
 
     minecraftForge {
         loader("50.1.0")
         mixinConfig("testmod.mixins.json")
     }
 
-    runs.off = false
+    runs {
+        off = false
+
+        config("client") {
+            if(OSUtils.oSId == OSUtils.OSX) {
+                jvmArgs("-XstartOnFirstThread")
+            }
+        }
+    }
 }
 
 unimined.minecraft(neoforge) {
     combineWith(sourceSets["main"])
+    combineWith(rootProject.sourceSets["neoforge"])
 
     neoForge {
         loader("119")
@@ -86,5 +99,13 @@ unimined.minecraft(neoforge) {
         ignoreConflicts(true)
     }
 
-    runs.off = false
+    runs {
+        off = false
+
+        config("client") {
+            if(OSUtils.oSId == OSUtils.OSX) {
+                jvmArgs("-XstartOnFirstThread")
+            }
+        }
+    }
 }
