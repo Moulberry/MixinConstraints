@@ -6,14 +6,8 @@ public abstract class Abstractions {
 	private static final Abstractions instance;
 	static {
 		try {
-			Class<?> clazz = switch(MixinConstraints.LOADER) {
-				case FABRIC -> Class.forName("com.moulberry.mixinconstraints.FabricAbstractionsImpl");
-				case FORGE -> Class.forName("com.moulberry.mixinconstraints.ForgeAbstractionsImpl");
-				case NEOFORGE -> Class.forName("com.moulberry.mixinconstraints.NeoForgeAbstractionsImpl");
-				default -> throw new IllegalStateException("Unexpected value: " + MixinConstraints.LOADER);
-			};
-
-			instance = (Abstractions) clazz.getDeclaredConstructor().newInstance();
+			String name = MixinConstraints.class.getPackageName() + "." + MixinConstraints.LOADER + "AbstractionsImpl";
+			instance = (Abstractions) Class.forName(name).getDeclaredConstructor().newInstance();
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException(e);
 		}

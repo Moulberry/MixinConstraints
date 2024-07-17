@@ -16,6 +16,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.SortedSet;
 
 public class MixinConstraints {
@@ -96,7 +97,7 @@ public class MixinConstraints {
         if (doesClassExist("net.neoforged.fml.loading.FMLLoader"))
             return Loader.NEOFORGE;
 
-        return Loader.UNKNOWN;
+        throw new RuntimeException("Could not determine loader");
     }
 
     private static boolean doesClassExist(String className) {
@@ -109,6 +110,13 @@ public class MixinConstraints {
     }
 
     public enum Loader {
-        FORGE, NEOFORGE, FABRIC, UNKNOWN
+        FORGE, NEOFORGE, FABRIC;
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ROOT)
+                    .replace("n", "N")
+                    .replace("f", "F");
+        }
     }
 }
