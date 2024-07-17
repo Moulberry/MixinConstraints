@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import static com.moulberry.mixinconstraints.util.ExceptionUtil.unchecked;
+
 public class MixinConstraintsBootstrap {
 
     private static final MethodHandle getExtensions;
@@ -30,7 +32,7 @@ public class MixinConstraintsBootstrap {
             getActiveExtensions = lookup.findGetter(Extensions.class, "activeExtensions", List.class);
             setActiveExtensions = lookup.findSetter(Extensions.class, "activeExtensions", List.class);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw unchecked(e);
         }
     }
 
@@ -52,7 +54,7 @@ public class MixinConstraintsBootstrap {
             addExtension(activeExtensions, extension);
             setActiveExtensions.invoke(extensions, Collections.unmodifiableList(activeExtensions));
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            throw unchecked(t);
         }
 	}
 

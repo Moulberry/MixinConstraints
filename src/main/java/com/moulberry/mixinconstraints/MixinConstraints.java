@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.SortedSet;
 
+import static com.moulberry.mixinconstraints.util.ExceptionUtil.unchecked;
+
 public class MixinConstraints {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("mixinconstraints");
@@ -47,7 +49,7 @@ public class MixinConstraints {
 
             return true;
         } catch (ClassNotFoundException | IOException e) {
-            throw new RuntimeException(e);
+            throw unchecked(e);
         }
     }
 
@@ -71,7 +73,7 @@ public class MixinConstraints {
             STATE_CLASS_NODE = lookup.findGetter(MixinInfo$State, "classNode", ClassNode.class);
 
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            throw unchecked(e);
         }
     }
 
@@ -84,7 +86,7 @@ public class MixinConstraints {
                 result.add(Pair.of(mixin, classNode));
             }
         } catch (Throwable e) {
-            throw new RuntimeException(e);
+            throw unchecked(e);
         }
         return result;
     }
