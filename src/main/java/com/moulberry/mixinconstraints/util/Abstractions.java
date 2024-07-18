@@ -6,7 +6,11 @@ public abstract class Abstractions {
 	private static final Abstractions instance;
 	static {
 		try {
-			String name = MixinConstraints.class.getPackageName() + "." + MixinConstraints.LOADER + "AbstractionsImpl";
+			String name = switch(MixinConstraints.LOADER) {
+				case FORGE -> "com.moulberry.mixinconstraints.ForgeAbstractionsImpl";
+				case NEOFORGE -> "com.moulberry.mixinconstraints.NeoForgeAbstractionsImpl";
+				case FABRIC -> "com.moulberry.mixinconstraints.FabricAbstractionsImpl";
+			};
 			instance = (Abstractions) Class.forName(name).getDeclaredConstructor().newInstance();
 		} catch (ReflectiveOperationException e) {
 			throw new RuntimeException(e);

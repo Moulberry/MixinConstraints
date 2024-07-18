@@ -1,25 +1,16 @@
 package com.moulberry.mixinconstraints;
 
 import com.moulberry.mixinconstraints.checker.AnnotationChecker;
-import com.moulberry.mixinconstraints.util.Pair;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-import org.spongepowered.asm.mixin.transformer.ext.ITargetClassContext;
 import org.spongepowered.asm.service.MixinService;
 
 import java.io.IOException;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.SortedSet;
 
-import static com.moulberry.mixinconstraints.util.ExceptionUtil.unchecked;
+import static com.moulberry.mixinconstraints.util.MixinHacks.unchecked;
 
 public class MixinConstraints {
 
@@ -51,44 +42,6 @@ public class MixinConstraints {
         } catch (ClassNotFoundException | IOException e) {
             throw unchecked(e);
         }
-    }
-
-    private static final MethodHandle TARGET_CLASS_CONTEXT_MIXINS;
-    private static final MethodHandle MIXIN_INFO_GET_STATE;
-    private static final MethodHandle STATE_CLASS_NODE;
-
-    static {
-        try {
-            Class<?> TargetClassContext = Class.forName("org.spongepowered.asm.mixin.transformer.TargetClassContext");
-            MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(TargetClassContext, MethodHandles.lookup());
-            TARGET_CLASS_CONTEXT_MIXINS = lookup.findGetter(TargetClassContext, "mixins", SortedSet.class);
-
-            Class<?> MixinInfo = Class.forName("org.spongepowered.asm.mixin.transformer.MixinInfo");
-            Class<?> MixinInfo$State = Class.forName("org.spongepowered.asm.mixin.transformer.MixinInfo$State");
-
-            lookup = MethodHandles.privateLookupIn(MixinInfo, MethodHandles.lookup());
-            MIXIN_INFO_GET_STATE = lookup.findVirtual(MixinInfo, "getState", MethodType.methodType(MixinInfo$State));
-
-            lookup = MethodHandles.privateLookupIn(MixinInfo$State, MethodHandles.lookup());
-            STATE_CLASS_NODE = lookup.findGetter(MixinInfo$State, "classNode", ClassNode.class);
-
-        } catch (Throwable e) {
-            throw unchecked(e);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<Pair<IMixinInfo, ClassNode>> getMixinsFor(ITargetClassContext context) {
-        List<Pair<IMixinInfo, ClassNode>> result = new ArrayList<>();
-        try {
-            for(IMixinInfo mixin : (SortedSet<IMixinInfo>) TARGET_CLASS_CONTEXT_MIXINS.invoke(context)) {
-                ClassNode classNode = (ClassNode) STATE_CLASS_NODE.invoke(MIXIN_INFO_GET_STATE.invoke(mixin));
-                result.add(Pair.of(mixin, classNode));
-            }
-        } catch (Throwable e) {
-            throw unchecked(e);
-        }
-        return result;
     }
 
     private static Loader getLoader() {

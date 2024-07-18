@@ -5,11 +5,13 @@ import com.moulberry.mixinconstraints.annotations.IfDevEnvironment;
 import com.moulberry.mixinconstraints.annotations.IfMinecraftVersion;
 import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 import com.moulberry.mixinconstraints.annotations.IfModLoaded;
+import org.jetbrains.annotations.ApiStatus;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 
 import java.util.List;
 
+@ApiStatus.Internal
 public class AnnotationChecker {
 
     private static final String IF_MOD_LOADED_DESC = Type.getDescriptor(IfModLoaded.class);
