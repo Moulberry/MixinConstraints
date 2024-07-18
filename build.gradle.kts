@@ -5,7 +5,7 @@ import com.vanniktech.maven.publish.SonatypeHost
 plugins {
     java
     idea
-    id("com.vanniktech.maven.publish") version("0.28.0")
+    id("com.vanniktech.maven.publish") version("0.28.0") // `maven-publish` doesn't support new maven central
 }
 
 version = "1.0.1"
@@ -22,7 +22,7 @@ java {
 repositories {
     mavenCentral()
     maven("https://maven.fabricmc.net/")
-    maven("https://repo.spongepowered.org/maven")
+    maven("https://repo.spongepowered.org/maven") // provides lexforge
     maven("https://maven.neoforged.net/releases")
 }
 
@@ -79,6 +79,8 @@ mavenPublishing {
         name = "MixinConstraints"
         description = "Library to enable/disable mixins using annotations"
         url = "https://github.com/Moulberry/MixinConstraints"
+        inceptionYear = "2024"
+        packaging = "jar"
 
         licenses {
             license {
@@ -86,11 +88,30 @@ mavenPublishing {
                 url = "https://opensource.org/license/mit"
             }
         }
+
         developers {
             developer {
                 name = "Moulberry"
+                url = "https://github.com/Moulberry"
             }
         }
+
+        contributors {
+            contributor {
+                name = "rdh"
+                url = "https://github.com/rhysdh540"
+            }
+            contributor {
+                name = "IThundxr"
+                url = "https://ithundxr.dev"
+            }
+        }
+
+        issueManagement {
+            system = "GitHub"
+            url = "https://github.com/Moulberry/MixinConstraints/issues"
+        }
+
         scm {
             url = "https://github.com/Moulberry/MixinConstraints/"
             connection = "scm:git:git://github.com/Moulberry/MixinConstraints.git"
