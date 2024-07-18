@@ -8,8 +8,6 @@ Annotations can be applied to mixin classes to toggle the whole mixin, or indivi
 
 MixinConstraints is available through Maven Central.
 
-The library currently only supports Fabric.
-
 __Gradle__
 ```groovy
 dependencies {
@@ -20,7 +18,7 @@ dependencies {
 Next, you will need to bootstrap the library to affect your mixins.
 
 The easiest way to do so is by using the provided Mixin Plugin by adding the following to your modid.mixins.json:
-```json
+```json5
 {
     "plugin": "com.moulberry.mixinconstraints.ConstraintsMixinPlugin",
 }

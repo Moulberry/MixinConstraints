@@ -17,7 +17,7 @@ public class ConstraintsMixinPlugin implements IMixinConfigPlugin {
         if (this.mixinPackage != null && !mixinClassName.startsWith(this.mixinPackage)) {
             return true;
         }
-        return MixinConstraints.shouldApplyMixin(targetClassName, mixinClassName);
+        return MixinConstraints.shouldApplyMixin(mixinClassName);
     }
 
     @Override

@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+issueTrackerURL="https://github.com/Moulberry/MixinConstraints/issues"
+license = "MIT"
+
+[[mods]]
+modId = "testmod"
+version = "1.0.0"
+displayName = "MixinConstraints Test Mod"
+authors = "Moulberry"
+description = '''
+A test mod for MixinConstraints
+'''
+
+[[dependencies.testmod]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.6]"
+ordering="NONE"
+side="BOTH"

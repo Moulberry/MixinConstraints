@@ -1,14 +1,10 @@
 package com.moulberry.mixinconstraints.checker;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.Version;
-import net.fabricmc.loader.api.VersionParsingException;
+import com.moulberry.mixinconstraints.util.Abstractions;
+import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Optional;
-
+@ApiStatus.Internal
 public class ConstraintChecker {
-
     /**
      * Check if *ANY* of the modIds provided are loaded
      */
@@ -34,7 +30,7 @@ public class ConstraintChecker {
     }
 
     public static boolean checkDevEnvironment() {
-        return FabricLoader.getInstance().isDevelopmentEnvironment();
+        return Abstractions.isDevelopmentEnvironment();
     }
 
     public static boolean checkMinecraftVersion(String minVersion, String maxVersion) {
@@ -42,43 +38,7 @@ public class ConstraintChecker {
     }
 
     private static boolean isModLoadedWithinVersion(String modId, String minVersion, String maxVersion) {
-        Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(modId);
-        if (modContainer.isEmpty()) {
-            return false;
-        }
-
-        return isVersionInRange(modContainer.get().getMetadata().getVersion(), minVersion, maxVersion);
-    }
-
-    private static boolean isVersionInRange(Version version, String minVersion, String maxVersion) {
-        Version min = minVersion == null || minVersion.isEmpty() ? null : tryParseVersion(minVersion);
-        Version max = maxVersion == null || maxVersion.isEmpty() ? null : tryParseVersion(maxVersion);
-
-        // Ensure range is valid (min <= max)
-        if (min != null && max != null && min.compareTo(max) > 0) {
-            throw new IllegalArgumentException("invalid range: minVersion (" + minVersion + ") > maxVersion (" + maxVersion + ")");
-        }
-
-        // Check version >= min
-        if (min != null && version.compareTo(min) < 0) {
-            return false;
-        }
-
-        // Check version <= max
-        if (max != null && version.compareTo(max) > 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private static Version tryParseVersion(String version) {
-        try {
-            return Version.parse(version);
-        } catch (VersionParsingException e) {
-            System.err.println("Invalid version string: " + version + "...");
-            throw new RuntimeException(e);
-        }
+        return Abstractions.isModLoadedWithinVersion(modId, minVersion, maxVersion);
     }
 
 }
