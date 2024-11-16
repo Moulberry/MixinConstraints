@@ -1,6 +1,5 @@
 package com.moulberry.mixinconstraints.util;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.objectweb.asm.tree.*;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -23,7 +22,6 @@ import java.util.SortedSet;
  * Most of this class is adapted from MixinExtras's {@code MixinInternals} class, by LlamaLad7.
  * MixinExtras is licensed under the MIT License: <a href="https://github.com/LlamaLad7/MixinExtras/blob/master/LICENSE">here</a>.
  */
-@ApiStatus.Internal
 @SuppressWarnings("unchecked")
 public final class MixinHacks {
 	private static final MethodHandle TARGET_CLASS_CONTEXT_MIXINS;
@@ -90,7 +88,7 @@ public final class MixinHacks {
 	}
 
 	private static void addExtension(List<IExtension> extensions, IExtension newExtension) {
-		extensions.addFirst(newExtension);
+		extensions.add(0, newExtension);
 
 		// If this runs before our extensions it will fail since we're not done generating our bytecode.
 		List<IExtension> lateExtensions = new ArrayList<>();

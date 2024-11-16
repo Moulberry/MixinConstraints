@@ -1,9 +1,7 @@
 package com.moulberry.mixinconstraints.checker;
 
 import com.moulberry.mixinconstraints.util.Abstractions;
-import org.jetbrains.annotations.ApiStatus;
 
-@ApiStatus.Internal
 public class ConstraintChecker {
     /**
      * Check if *ANY* of the modIds provided are loaded
