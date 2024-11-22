@@ -8,7 +8,7 @@ plugins {
     id("com.vanniktech.maven.publish") version("0.28.0") // `maven-publish` doesn't support new maven central
 }
 
-version = "1.0.1"
+version = "1.0.2"
 group = "com.moulberry.mixinconstraints"
 
 idea.module.isDownloadSources = true
@@ -17,13 +17,6 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
-}
-
-repositories {
-    mavenCentral()
-    maven("https://maven.fabricmc.net/")
-    maven("https://repo.spongepowered.org/maven") // provides lexforge
-    maven("https://maven.neoforged.net/releases")
 }
 
 val fabric: SourceSet by sourceSets.creating {
