@@ -19,6 +19,13 @@ java {
     }
 }
 
+repositories {
+    mavenCentral()
+    maven("https://maven.fabricmc.net/")
+    maven("https://repo.spongepowered.org/maven") // provides lexforge
+    maven("https://maven.neoforged.net/releases")
+}
+
 val fabric: SourceSet by sourceSets.creating {
     compileClasspath += sourceSets.main.get().output
 }
