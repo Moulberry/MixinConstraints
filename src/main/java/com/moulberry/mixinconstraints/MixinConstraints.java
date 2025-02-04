@@ -8,15 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.service.MixinService;
 
 import java.io.IOException;
-import java.util.Locale;
-
-import static com.moulberry.mixinconstraints.util.MixinHacks.unchecked;
 
 public class MixinConstraints {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("mixinconstraints");
     public static final boolean VERBOSE = "true".equals(System.getProperty("mixinconstraints.verbose"));
-    public static final Loader LOADER = getLoader();
+    private static Loader loader = null;
 
     public static boolean shouldApplyMixin(String mixinClassName) {
         try {
@@ -40,17 +37,26 @@ public class MixinConstraints {
 
             return true;
         } catch (ClassNotFoundException | IOException e) {
-            throw unchecked(e);
+            throw new RuntimeException(e);
         }
     }
 
-    private static Loader getLoader() {
-        if (doesClassExist("net.fabricmc.loader.api.FabricLoader"))
-            return Loader.FABRIC;
-        if (doesClassExist("net.minecraftforge.fml.loading.FMLLoader"))
-            return Loader.FORGE;
-        if (doesClassExist("net.neoforged.fml.loading.FMLLoader"))
+    public static Loader getLoader() {
+        if (loader == null) {
+            loader = findLoader();
+        }
+
+        return loader;
+    }
+
+    private static Loader findLoader() {
+        if (doesClassExist("net.neoforged.fml.loading.FMLLoader")) {
             return Loader.NEOFORGE;
+        } else if (doesClassExist("net.minecraftforge.fml.loading.FMLLoader")) {
+            return Loader.FORGE;
+        } else if (doesClassExist("net.fabricmc.loader.api.FabricLoader")) {
+            return Loader.FABRIC;
+        }
 
         throw new RuntimeException("Could not determine loader");
     }
@@ -69,9 +75,11 @@ public class MixinConstraints {
 
         @Override
         public String toString() {
-            return name().toLowerCase(Locale.ROOT)
-                    .replace("n", "N")
-                    .replace("f", "F");
+            return switch (this) {
+                case FORGE -> "Forge";
+                case NEOFORGE -> "NeoForge";
+                case FABRIC -> "Fabric";
+            };
         }
     }
 }

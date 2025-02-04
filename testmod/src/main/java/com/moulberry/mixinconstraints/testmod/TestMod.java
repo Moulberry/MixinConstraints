@@ -9,6 +9,6 @@ public final class TestMod {
 
 	public static void init() {
 		LOGGER.info("init() called");
-		LOGGER.info("Platform: {}", MixinConstraints.LOADER);
+		LOGGER.info("Platform: {}", MixinConstraints.getLoader());
 	}
 }

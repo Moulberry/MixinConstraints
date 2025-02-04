@@ -24,41 +24,49 @@ import java.util.SortedSet;
  */
 @SuppressWarnings("unchecked")
 public final class MixinHacks {
-	private static final MethodHandle TARGET_CLASS_CONTEXT_MIXINS;
-	private static final MethodHandle MIXIN_INFO_GET_STATE;
-	private static final MethodHandle STATE_CLASS_NODE;
+	private static MethodHandle TARGET_CLASS_CONTEXT_MIXINS;
+	private static MethodHandle MIXIN_INFO_GET_STATE;
+	private static MethodHandle STATE_CLASS_NODE;
 
-	private static final MethodHandle EXTENSIONS_EXTENSIONS;
-	private static final MethodHandle EXTENSIONS_ACTIVE_EXTENSIONS_GET;
-	private static final MethodHandle EXTENSIONS_ACTIVE_EXTENSIONS_SET;
+	private static MethodHandle EXTENSIONS_EXTENSIONS;
+	private static MethodHandle EXTENSIONS_ACTIVE_EXTENSIONS_GET;
+	private static MethodHandle EXTENSIONS_ACTIVE_EXTENSIONS_SET;
 
-	static {
-		try {
-			Class<?> TargetClassContext = Class.forName("org.spongepowered.asm.mixin.transformer.TargetClassContext");
-			MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(TargetClassContext, MethodHandles.lookup());
-			TARGET_CLASS_CONTEXT_MIXINS = lookup.findGetter(TargetClassContext, "mixins", SortedSet.class);
+    private static boolean initialized = false;
 
-			Class<?> MixinInfo = Class.forName("org.spongepowered.asm.mixin.transformer.MixinInfo");
-			Class<?> MixinInfo$State = Class.forName("org.spongepowered.asm.mixin.transformer.MixinInfo$State");
+    private static void tryInit() {
+        if (initialized) {
+            return;
+        }
+        initialized = true;
 
-			lookup = MethodHandles.privateLookupIn(MixinInfo, MethodHandles.lookup());
-			MIXIN_INFO_GET_STATE = lookup.findVirtual(MixinInfo, "getState", MethodType.methodType(MixinInfo$State));
+        try {
+            Class<?> TargetClassContext = Class.forName("org.spongepowered.asm.mixin.transformer.TargetClassContext");
+            MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(TargetClassContext, MethodHandles.lookup());
+            TARGET_CLASS_CONTEXT_MIXINS = lookup.findGetter(TargetClassContext, "mixins", SortedSet.class);
 
-			lookup = MethodHandles.privateLookupIn(MixinInfo$State, MethodHandles.lookup());
-			STATE_CLASS_NODE = lookup.findGetter(MixinInfo$State, "classNode", ClassNode.class);
+            Class<?> MixinInfo = Class.forName("org.spongepowered.asm.mixin.transformer.MixinInfo");
+            Class<?> MixinInfo$State = Class.forName("org.spongepowered.asm.mixin.transformer.MixinInfo$State");
 
-			lookup = MethodHandles.privateLookupIn(Extensions.class, MethodHandles.lookup());
+            lookup = MethodHandles.privateLookupIn(MixinInfo, MethodHandles.lookup());
+            MIXIN_INFO_GET_STATE = lookup.findVirtual(MixinInfo, "getState", MethodType.methodType(MixinInfo$State));
 
-			EXTENSIONS_EXTENSIONS = lookup.findGetter(Extensions.class, "extensions", List.class);
-			EXTENSIONS_ACTIVE_EXTENSIONS_GET = lookup.findGetter(Extensions.class, "activeExtensions", List.class);
-			EXTENSIONS_ACTIVE_EXTENSIONS_SET = lookup.findSetter(Extensions.class, "activeExtensions", List.class);
+            lookup = MethodHandles.privateLookupIn(MixinInfo$State, MethodHandles.lookup());
+            STATE_CLASS_NODE = lookup.findGetter(MixinInfo$State, "classNode", ClassNode.class);
 
-		} catch (Throwable e) {
-			throw unchecked(e);
-		}
-	}
+            lookup = MethodHandles.privateLookupIn(Extensions.class, MethodHandles.lookup());
+
+            EXTENSIONS_EXTENSIONS = lookup.findGetter(Extensions.class, "extensions", List.class);
+            EXTENSIONS_ACTIVE_EXTENSIONS_GET = lookup.findGetter(Extensions.class, "activeExtensions", List.class);
+            EXTENSIONS_ACTIVE_EXTENSIONS_SET = lookup.findSetter(Extensions.class, "activeExtensions", List.class);
+
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	public static void registerMixinExtension(IExtension extension) {
+        tryInit();
 		try {
 			Extensions extensions = (Extensions) ((IMixinTransformer) MixinEnvironment.getDefaultEnvironment().getActiveTransformer())
 					.getExtensions();
@@ -69,11 +77,12 @@ public final class MixinHacks {
 
 			EXTENSIONS_ACTIVE_EXTENSIONS_SET.invokeExact(extensions, Collections.unmodifiableList(activeExtensions));
 		} catch (Throwable t) {
-			throw unchecked(t);
+			throw new RuntimeException(t);
 		}
 	}
 
 	public static List<Pair<IMixinInfo, ClassNode>> getMixinsFor(ITargetClassContext context) {
+        tryInit();
 		List<Pair<IMixinInfo, ClassNode>> result = new ArrayList<>();
 		try {
 			// note: can't use invokeExact here because TargetClassContext is not public
@@ -82,7 +91,7 @@ public final class MixinHacks {
 				result.add(Pair.of(mixin, classNode));
 			}
 		} catch (Throwable e) {
-			throw unchecked(e);
+			throw new RuntimeException(e);
 		}
 		return result;
 	}
@@ -102,11 +111,4 @@ public final class MixinHacks {
 		extensions.addAll(lateExtensions);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T extends Throwable> RuntimeException unchecked(Throwable t) throws T {
-		throw (T) t;
-	}
-
-	private MixinHacks() {
-	}
 }

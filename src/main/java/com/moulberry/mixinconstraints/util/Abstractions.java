@@ -3,27 +3,34 @@ package com.moulberry.mixinconstraints.util;
 import com.moulberry.mixinconstraints.MixinConstraints;
 
 public abstract class Abstractions {
-	private static final Abstractions instance;
-	static {
-		try {
-			String name = switch(MixinConstraints.LOADER) {
-				case FORGE -> "com.moulberry.mixinconstraints.ForgeAbstractionsImpl";
-				case NEOFORGE -> "com.moulberry.mixinconstraints.NeoForgeAbstractionsImpl";
-				case FABRIC -> "com.moulberry.mixinconstraints.FabricAbstractionsImpl";
-			};
-			instance = (Abstractions) Class.forName(name).getDeclaredConstructor().newInstance();
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	private static Abstractions instance = null;
+
+    private static Abstractions getInstance() {
+        if (instance == null) {
+            try {
+                String name = switch (MixinConstraints.getLoader()) {
+                    case FORGE -> "com.moulberry.mixinconstraints.ForgeAbstractionsImpl";
+                    case NEOFORGE -> "com.moulberry.mixinconstraints.NeoForgeAbstractionsImpl";
+                    case FABRIC -> "com.moulberry.mixinconstraints.FabricAbstractionsImpl";
+                };
+                instance = (Abstractions) Class.forName(name).getDeclaredConstructor().newInstance();
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return instance;
+    }
 
 	public static boolean isDevelopmentEnvironment() {
+        Abstractions instance = getInstance();
 		return instance.isDevEnvironment();
 	}
 
 	public static boolean isModLoadedWithinVersion(String modId, String minVersion, String maxVersion) {
+        Abstractions instance = getInstance();
+
 		String version = instance.getModVersion(modId);
-		if(version == null) {
+		if (version == null) {
 			return false;
 		}
 

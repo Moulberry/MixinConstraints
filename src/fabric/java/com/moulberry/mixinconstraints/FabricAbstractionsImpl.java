@@ -5,8 +5,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
 
-import static com.moulberry.mixinconstraints.util.MixinHacks.unchecked;
-
 public class FabricAbstractionsImpl extends Abstractions {
 	@Override
 	protected boolean isDevEnvironment() {
@@ -36,7 +34,7 @@ public class FabricAbstractionsImpl extends Abstractions {
 			return (min == null || currentVersion.compareTo(min) >= 0) && (max == null || currentVersion.compareTo(max) <= 0);
 
 		} catch (VersionParsingException e) {
-			throw unchecked(e);
+			throw new RuntimeException(e);
 		}
 	}
 }
