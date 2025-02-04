@@ -8,7 +8,7 @@ plugins {
     id("com.vanniktech.maven.publish") version("0.28.0") // `maven-publish` doesn't support new maven central
 }
 
-version = "1.0.4"
+version = "1.0.5"
 group = "com.moulberry.mixinconstraints"
 
 idea.module.isDownloadSources = true
@@ -39,8 +39,8 @@ val neoforge: SourceSet by sourceSets.creating {
 }
 
 dependencies {
-    implementation("org.spongepowered:mixin:0.8.5")
-    implementation("org.ow2.asm:asm-tree:9.7")
+    compileOnly("org.spongepowered:mixin:0.8.5")
+    compileOnly("org.ow2.asm:asm-tree:9.7")
     implementation("org.slf4j:slf4j-api:2.0.12")
     implementation("org.jetbrains:annotations:24.1.0")
 
