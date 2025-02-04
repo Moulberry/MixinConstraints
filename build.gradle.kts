@@ -46,10 +46,10 @@ dependencies {
 
     "fabricImplementation"("net.fabricmc:fabric-loader:0.15.0")
 
-    "forgeImplementation"("net.minecraftforge:fmlloader:1.20.6-50.1.0")
-    "forgeImplementation"("net.minecraftforge:fmlcore:1.20.6-50.1.0")
+    "forgeImplementation"("net.minecraftforge:fmlloader:1.20.1-47.3.27")
+    "forgeImplementation"("net.minecraftforge:fmlcore:1.20.1-47.3.27")
 
-    "neoforgeImplementation"("net.neoforged.fancymodloader:loader:3.0.45")
+    "neoforgeImplementation"("net.neoforged.fancymodloader:loader:3.0.13")
 }
 
 tasks.jar {

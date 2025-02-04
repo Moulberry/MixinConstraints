@@ -26,7 +26,7 @@ public class NeoForgeAbstractionsImpl extends Abstractions {
 			MixinConstraints.LOGGER.warn("Multiple mods with id {} found, using first one", modid);
 		}
 
-		return infoList.getFirst().getVersion().toString();
+		return infoList.get(0).getVersion().toString();
 	}
 
 	@Override
