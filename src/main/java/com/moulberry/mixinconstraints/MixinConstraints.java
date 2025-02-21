@@ -41,6 +41,10 @@ public class MixinConstraints {
         }
     }
 
+    public static boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        return shouldApplyMixin(mixinClassName);
+    }
+
     public static Loader getLoader() {
         if (loader == null) {
             loader = findLoader();
