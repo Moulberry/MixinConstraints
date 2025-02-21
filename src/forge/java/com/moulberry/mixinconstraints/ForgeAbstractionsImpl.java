@@ -1,6 +1,7 @@
 package com.moulberry.mixinconstraints;
 
 import com.moulberry.mixinconstraints.util.Abstractions;
+import net.minecraftforge.fml.loading.LoadingModList;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.Restriction;
@@ -19,7 +20,7 @@ public class ForgeAbstractionsImpl extends Abstractions {
 
 	@Override
 	protected String getModVersion(String modid) {
-		List<IModInfo> infoList = ModList.get().getModFileById(modid).getMods();
+		List<IModInfo> infoList = LoadingModList.get().getModFileById(modid).getMods();
 		if(infoList.isEmpty()) {
 			return null;
 		} else if(infoList.size() > 1) {
