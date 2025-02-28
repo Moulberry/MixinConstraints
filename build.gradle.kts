@@ -8,7 +8,7 @@ plugins {
     id("com.vanniktech.maven.publish") version("0.28.0") // `maven-publish` doesn't support new maven central
 }
 
-version = "1.0.6"
+version = "1.0.7"
 group = "com.moulberry.mixinconstraints"
 
 idea.module.isDownloadSources = true
