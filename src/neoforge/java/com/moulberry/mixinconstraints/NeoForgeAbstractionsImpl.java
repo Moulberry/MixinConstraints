@@ -1,15 +1,12 @@
 package com.moulberry.mixinconstraints;
 
 import com.moulberry.mixinconstraints.util.Abstractions;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.LoadingModList;
+import net.neoforged.neoforgespi.language.IModFileInfo;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.Restriction;
-
-import net.neoforged.neoforgespi.language.IModInfo;
-
-import java.util.List;
 
 public class NeoForgeAbstractionsImpl extends Abstractions {
 	@Override
@@ -19,14 +16,8 @@ public class NeoForgeAbstractionsImpl extends Abstractions {
 
 	@Override
 	protected String getModVersion(String modid) {
-		List<IModInfo> infoList = ModList.get().getModFileById(modid).getMods();
-		if(infoList.isEmpty()) {
-			return null;
-		} else if(infoList.size() > 1) {
-			MixinConstraints.LOGGER.warn("Multiple mods with id {} found, using first one", modid);
-		}
-
-		return infoList.get(0).getVersion().toString();
+		IModFileInfo info = LoadingModList.get().getModFileById(modid);
+		return info == null || info.getMods().isEmpty() ? null : info.versionString();
 	}
 
 	@Override

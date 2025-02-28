@@ -1,16 +1,12 @@
 package com.moulberry.mixinconstraints;
 
 import com.moulberry.mixinconstraints.util.Abstractions;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.LoadingModList;
+import net.minecraftforge.forgespi.language.IModFileInfo;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.Restriction;
-
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.forgespi.language.IModInfo;
-
-import java.util.List;
 
 public class ForgeAbstractionsImpl extends Abstractions {
 	@Override
@@ -20,14 +16,8 @@ public class ForgeAbstractionsImpl extends Abstractions {
 
 	@Override
 	protected String getModVersion(String modid) {
-		List<IModInfo> infoList = LoadingModList.get().getModFileById(modid).getMods();
-		if(infoList.isEmpty()) {
-			return null;
-		} else if(infoList.size() > 1) {
-			MixinConstraints.LOGGER.warn("Multiple mods with id {} found, using first one", modid);
-		}
-
-		return infoList.get(0).getVersion().toString();
+		IModFileInfo info = LoadingModList.get().getModFileById(modid);
+		return info == null || info.getMods().isEmpty() ? null : info.versionString();
 	}
 
 	@Override
