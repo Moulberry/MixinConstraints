@@ -28,7 +28,7 @@ public class ConstraintChecker {
     }
 
     public static boolean checkDevEnvironment() {
-        return Abstractions.isDevelopmentEnvironment();
+        return Abstractions.getInstance().isDevEnvironment();
     }
 
     public static boolean checkMinecraftVersion(String minVersion, String maxVersion) {
@@ -36,7 +36,7 @@ public class ConstraintChecker {
     }
 
     private static boolean isModLoadedWithinVersion(String modId, String minVersion, String maxVersion) {
-        return Abstractions.isModLoadedWithinVersion(modId, minVersion, maxVersion);
+        return Abstractions.getInstance().isModLoadedWithinVersion(modId, minVersion, maxVersion);
     }
 
 }
