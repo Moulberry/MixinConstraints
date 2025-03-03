@@ -10,18 +10,18 @@ import org.apache.maven.artifact.versioning.Restriction;
 
 public class NeoForgeAbstractionsImpl extends Abstractions {
 	@Override
-	protected boolean isDevEnvironment() {
+	public boolean isDevEnvironment() {
 		return !FMLLoader.isProduction();
 	}
 
 	@Override
-	protected String getModVersion(String modid) {
+	public String getModVersion(String modid) {
 		IModFileInfo info = LoadingModList.get().getModFileById(modid);
 		return info == null || info.getMods().isEmpty() ? null : info.versionString();
 	}
 
 	@Override
-	protected boolean isVersionInRange(String version, String minVersion, String maxVersion) {
+	public boolean isVersionInRange(String version, String minVersion, String maxVersion) {
 		ArtifactVersion currentVersion = new DefaultArtifactVersion(version);
 		ArtifactVersion min = minVersion == null ? null : new DefaultArtifactVersion(minVersion);
 		ArtifactVersion max = maxVersion == null ? null : new DefaultArtifactVersion(maxVersion);
@@ -31,5 +31,10 @@ public class NeoForgeAbstractionsImpl extends Abstractions {
 		}
 
 		return new Restriction(min, true, max, true).containsVersion(currentVersion);
+	}
+
+	@Override
+	public String getPlatformName() {
+		return "NeoForge";
 	}
 }
