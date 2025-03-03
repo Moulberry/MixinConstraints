@@ -81,14 +81,15 @@ public final class MixinHacks {
 		}
 	}
 
-	public static List<Pair<IMixinInfo, ClassNode>> getMixinsFor(ITargetClassContext context) {
+	public static List<MixinInfo> getMixinsFor(ITargetClassContext context) {
         tryInit();
-		List<Pair<IMixinInfo, ClassNode>> result = new ArrayList<>();
+		List<MixinInfo> result = new ArrayList<>();
 		try {
 			// note: can't use invokeExact here because TargetClassContext is not public
-			for(IMixinInfo mixin : (SortedSet<IMixinInfo>) TARGET_CLASS_CONTEXT_MIXINS.invoke(context)) {
+			SortedSet<IMixinInfo> mixinInfos = (SortedSet<IMixinInfo>) TARGET_CLASS_CONTEXT_MIXINS.invoke(context);
+			for(IMixinInfo mixin : mixinInfos) {
 				ClassNode classNode = (ClassNode) STATE_CLASS_NODE.invoke(MIXIN_INFO_GET_STATE.invoke(mixin));
-				result.add(Pair.of(mixin, classNode));
+				result.add(new MixinInfo(mixinInfos, mixin, classNode));
 			}
 		} catch (Throwable e) {
 			throw new RuntimeException(e);
