@@ -5,6 +5,7 @@
   "plugin": "com.moulberry.mixinconstraints.ConstraintsMixinPlugin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "TestMixinIntoNonExistentClass"
   ],
   "client": [
     "ExampleMixin",
