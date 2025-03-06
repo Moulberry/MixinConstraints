@@ -32,4 +32,9 @@ public class ForgeAbstractionsImpl extends Abstractions {
 
 		return new Restriction(min, true, max, true).containsVersion(currentVersion);
 	}
+
+	@Override
+	public String getPlatformName() {
+		return "Forge";
+	}
 }

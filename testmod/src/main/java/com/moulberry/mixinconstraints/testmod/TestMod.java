@@ -12,7 +12,7 @@ public final class TestMod {
 
 	public static void init() {
 		LOGGER.info("init() called");
-		LOGGER.info("Platform: {}", MixinConstraints.getLoader());
+		LOGGER.info("Platform: {}", MixinConstraints.getLoaderName());
 
         if (!modLoadedTruePassed) {
             throw new Error("TestIfModLoadedTrue failed!");

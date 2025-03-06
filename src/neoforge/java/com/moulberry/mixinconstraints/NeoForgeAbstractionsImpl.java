@@ -32,4 +32,9 @@ public class NeoForgeAbstractionsImpl extends Abstractions {
 
 		return new Restriction(min, true, max, true).containsVersion(currentVersion);
 	}
+
+	@Override
+	public String getPlatformName() {
+		return "NeoForge";
+	}
 }

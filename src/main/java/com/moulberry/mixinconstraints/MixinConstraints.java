@@ -1,6 +1,7 @@
 package com.moulberry.mixinconstraints;
 
 import com.moulberry.mixinconstraints.checker.AnnotationChecker;
+import com.moulberry.mixinconstraints.util.Abstractions;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.slf4j.Logger;
@@ -45,6 +46,14 @@ public class MixinConstraints {
         return shouldApplyMixin(mixinClassName);
     }
 
+    public static String getLoaderName() {
+        return Abstractions.getLoaderName();
+    }
+
+    /**
+     * @deprecated use {@link #getLoaderName()} instead.
+     */
+    @Deprecated
     public static Loader getLoader() {
         if (loader == null) {
             loader = findLoader();
@@ -54,28 +63,16 @@ public class MixinConstraints {
     }
 
     private static Loader findLoader() {
-        if (doesClassExist("net.neoforged.fml.loading.FMLLoader")) {
-            return Loader.NEOFORGE;
-        } else if (doesClassExist("net.minecraftforge.fml.loading.FMLLoader")) {
-            return Loader.FORGE;
-        } else if (doesClassExist("net.fabricmc.loader.api.FabricLoader")) {
-            return Loader.FABRIC;
-        }
-
-        throw new RuntimeException("Could not determine loader");
-    }
-
-    private static boolean doesClassExist(String className) {
-        try {
-            Class.forName(className, false, MixinConstraints.class.getClassLoader());
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
+        return switch (Abstractions.getLoaderName()) {
+            case "Forge" -> Loader.FORGE;
+            case "NeoForge" -> Loader.NEOFORGE;
+            case "Fabric" -> Loader.FABRIC;
+            default -> Loader.CUSTOM;
+        };
     }
 
     public enum Loader {
-        FORGE, NEOFORGE, FABRIC;
+        FORGE, NEOFORGE, FABRIC, CUSTOM;
 
         @Override
         public String toString() {
@@ -83,6 +80,7 @@ public class MixinConstraints {
                 case FORGE -> "Forge";
                 case NEOFORGE -> "NeoForge";
                 case FABRIC -> "Fabric";
+                case CUSTOM -> getLoaderName();
             };
         }
     }
