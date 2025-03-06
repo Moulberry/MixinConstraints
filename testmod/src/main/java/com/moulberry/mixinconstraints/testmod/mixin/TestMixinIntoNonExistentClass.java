@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.Pseudo;
 
 @IfModLoaded("doesntexist")
 @Mixin(targets = "com.doesnt.exist.Main")
-@Pseudo
 public class TestMixinIntoNonExistentClass {
 
     /*

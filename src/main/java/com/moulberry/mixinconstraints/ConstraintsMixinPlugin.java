@@ -9,21 +9,14 @@ import java.util.List;
 import java.util.Set;
 
 public class ConstraintsMixinPlugin implements IMixinConfigPlugin {
-
-    private String mixinPackage;
-
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (this.mixinPackage != null && !mixinClassName.startsWith(this.mixinPackage)) {
-            return true;
-        }
-        return MixinConstraints.shouldApplyMixin(mixinClassName);
+        return true;
     }
 
     @Override
     public void onLoad(String mixinPackage) {
-        this.mixinPackage = mixinPackage;
-        MixinConstraintsBootstrap.init(mixinPackage);
+        MixinConstraintsBootstrap.init();
     }
 
     @Override

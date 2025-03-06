@@ -6,14 +6,20 @@ import java.util.Set;
 
 
 public class MixinConstraintsBootstrap {
+    private static boolean initialized = false;
 
-    private static final Set<String> initializedMixinPackages = new HashSet<>();
+    public static void init() {
+        if (initialized) return;
+        initialized = true;
+        MixinHacks.registerMixinExtension(new ConstraintsMixinExtension());
+    }
 
+    /**
+     * @deprecated use {@link #init()} instead.
+     */
+    @Deprecated
     public static void init(String mixinPackage) {
-		if(initializedMixinPackages.contains(mixinPackage)) return;
-
-		initializedMixinPackages.add(mixinPackage);
-        MixinHacks.registerMixinExtension(new ConstraintsMixinExtension(mixinPackage));
+		init();
 	}
 
 }

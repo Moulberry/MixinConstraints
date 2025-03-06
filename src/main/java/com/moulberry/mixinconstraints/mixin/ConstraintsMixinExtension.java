@@ -1,23 +1,15 @@
 package com.moulberry.mixinconstraints.mixin;
 
 import com.moulberry.mixinconstraints.util.MixinHacks;
-import com.moulberry.mixinconstraints.util.Pair;
+import com.moulberry.mixinconstraints.util.MixinInfo;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.MixinEnvironment;
-import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import org.spongepowered.asm.mixin.transformer.ext.IExtension;
 import org.spongepowered.asm.mixin.transformer.ext.ITargetClassContext;
 
 public class ConstraintsMixinExtension implements IExtension {
 
-    private final String mixinPackage;
-
-    public ConstraintsMixinExtension(String mixinPackage) {
-        if (!mixinPackage.endsWith(".")) {
-            mixinPackage += ".";
-        }
-        this.mixinPackage = mixinPackage;
-    }
+    public ConstraintsMixinExtension() {}
 
     @Override
     public boolean checkActive(MixinEnvironment environment) {
@@ -26,10 +18,8 @@ public class ConstraintsMixinExtension implements IExtension {
 
     @Override
     public void preApply(ITargetClassContext context) {
-        for (Pair<IMixinInfo, ClassNode> pair : MixinHacks.getMixinsFor(context)) {
-            if (pair.first().getConfig().getMixinPackage().equals(this.mixinPackage)) {
-                MixinTransformer.transform(pair.first(), pair.second());
-            }
+        for (MixinInfo mixinInfo : MixinHacks.getMixinsFor(context)) {
+            MixinTransformer.transform(mixinInfo);
         }
     }
 

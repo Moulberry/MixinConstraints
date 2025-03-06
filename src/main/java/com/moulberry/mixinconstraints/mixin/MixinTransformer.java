@@ -2,22 +2,28 @@ package com.moulberry.mixinconstraints.mixin;
 
 import com.moulberry.mixinconstraints.checker.AnnotationChecker;
 import com.moulberry.mixinconstraints.MixinConstraints;
+import com.moulberry.mixinconstraints.util.MixinInfo;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class MixinTransformer {
-
-
-    public static void transform(IMixinInfo info, ClassNode classNode) {
+    public static void transform(MixinInfo mixinInfo) {
         if (MixinConstraints.VERBOSE) {
-            MixinConstraints.LOGGER.info("Checking inner mixin constraints for {}", info.getClassName());
+            MixinConstraints.LOGGER.info("Checking inner mixin constraints for {}", mixinInfo.mixin().getClassName());
         }
 
+        ClassNode classNode = mixinInfo.classNode();
         if (classNode.visibleAnnotations != null) {
+            for (AnnotationNode node : classNode.visibleAnnotations) {
+                if (!AnnotationChecker.checkAnnotationNode(node)) {
+                    warnFailingConstraint(mixinInfo.mixin().getClassName());
+                    mixinInfo.disableMixin();
+                    return;
+                }
+            }
             classNode.visibleAnnotations.removeIf(AnnotationChecker::isConstraintAnnotationNode);
         }
 
@@ -51,4 +57,9 @@ public class MixinTransformer {
         return remove;
     }
 
+    private static void warnFailingConstraint(String targetName) {
+        if (MixinConstraints.VERBOSE) {
+            MixinConstraints.LOGGER.warn("Preventing application of mixin {} due to failing constraint", targetName);
+        }
+    }
 }
