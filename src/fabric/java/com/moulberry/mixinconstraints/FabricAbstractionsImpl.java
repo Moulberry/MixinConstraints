@@ -37,4 +37,9 @@ public class FabricAbstractionsImpl extends Abstractions {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public String getPlatformName() {
+		return "Fabric";
+	}
 }
