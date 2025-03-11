@@ -12,15 +12,15 @@ import net.minecraft.client.gui.screens.TitleScreen;
 @Mixin(TitleScreen.class)
 public class ExampleMixin {
 
-	@IfDevEnvironment
-	@Inject(method = "init()V", at = @At("HEAD"))
-	private void initDev(CallbackInfo info) {
-		TestMod.LOGGER.info("in dev environment");
-	}
+    @IfDevEnvironment
+    @Inject(method = "init()V", at = @At("HEAD"))
+    private void initDev(CallbackInfo info) {
+        TestMod.LOGGER.info("in dev environment");
+    }
 
-	@IfDevEnvironment(negate = true)
-	@Inject(method = "init()V", at = @At("HEAD"))
-	private void initProd(CallbackInfo info) {
-		TestMod.LOGGER.info("in production");
-	}
+    @IfDevEnvironment(negate = true)
+    @Inject(method = "init()V", at = @At("HEAD"))
+    private void initProd(CallbackInfo info) {
+        TestMod.LOGGER.info("in production");
+    }
 }

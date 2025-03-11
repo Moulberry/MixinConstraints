@@ -3,7 +3,7 @@ package com.moulberry.mixinconstraints.util;
 import com.moulberry.mixinconstraints.MixinConstraints;
 
 public abstract class Abstractions {
-	private static Abstractions instance = null;
+    private static Abstractions instance = null;
 
     private static boolean doesClassExist(String className) {
         try {
@@ -37,29 +37,29 @@ public abstract class Abstractions {
         return instance;
     }
 
-	public static boolean isDevelopmentEnvironment() {
+    public static boolean isDevelopmentEnvironment() {
         Abstractions instance = getInstance();
-		return instance.isDevEnvironment();
-	}
+        return instance.isDevEnvironment();
+    }
 
-	public static boolean isModLoadedWithinVersion(String modId, String minVersion, String maxVersion) {
+    public static boolean isModLoadedWithinVersion(String modId, String minVersion, String maxVersion) {
         Abstractions instance = getInstance();
 
-		String version = instance.getModVersion(modId);
-		if (version == null) {
-			return false;
-		}
+        String version = instance.getModVersion(modId);
+        if (version == null) {
+            return false;
+        }
 
-		return instance.isVersionInRange(version, minVersion, maxVersion);
-	}
+        return instance.isVersionInRange(version, minVersion, maxVersion);
+    }
 
     public static String getLoaderName() {
         Abstractions instance = getInstance();
         return instance.getPlatformName();
     }
 
-	protected abstract boolean isDevEnvironment();
-	protected abstract String getModVersion(String modId);
-	protected abstract boolean isVersionInRange(String version, String minVersion, String maxVersion);
+    protected abstract boolean isDevEnvironment();
+    protected abstract String getModVersion(String modId);
+    protected abstract boolean isVersionInRange(String version, String minVersion, String maxVersion);
     protected abstract String getPlatformName();
 }

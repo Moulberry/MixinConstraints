@@ -27,7 +27,7 @@ public class AnnotationChecker {
     }
 
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "DuplicatedCode"})
-	public static boolean checkAnnotationNode(AnnotationNode node) {
+    public static boolean checkAnnotationNode(AnnotationNode node) {
         if (IF_MOD_LOADED_DESC.equals(node.desc)) {
             String value = getAnnotationValue(node, "value", "");
             if (value.isEmpty()) throw new IllegalArgumentException("modid must not be empty");

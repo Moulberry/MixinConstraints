@@ -10,10 +10,10 @@ public class MixinConstraintsBootstrap {
     private static final Set<String> initializedMixinPackages = new HashSet<>();
 
     public static void init(String mixinPackage) {
-		if(initializedMixinPackages.contains(mixinPackage)) return;
+        if(initializedMixinPackages.contains(mixinPackage)) return;
 
-		initializedMixinPackages.add(mixinPackage);
+        initializedMixinPackages.add(mixinPackage);
         MixinHacks.registerMixinExtension(new ConstraintsMixinExtension(mixinPackage));
-	}
+    }
 
 }

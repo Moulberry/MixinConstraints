@@ -4,7 +4,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod("testmod")
 public class TestModForge {
-	public TestModForge() {
-		TestMod.init();
-	}
+    public TestModForge() {
+        TestMod.init();
+    }
 }

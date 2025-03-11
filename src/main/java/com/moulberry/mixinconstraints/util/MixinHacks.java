@@ -24,13 +24,13 @@ import java.util.SortedSet;
  */
 @SuppressWarnings("unchecked")
 public final class MixinHacks {
-	private static MethodHandle TARGET_CLASS_CONTEXT_MIXINS;
-	private static MethodHandle MIXIN_INFO_GET_STATE;
-	private static MethodHandle STATE_CLASS_NODE;
+    private static MethodHandle TARGET_CLASS_CONTEXT_MIXINS;
+    private static MethodHandle MIXIN_INFO_GET_STATE;
+    private static MethodHandle STATE_CLASS_NODE;
 
-	private static MethodHandle EXTENSIONS_EXTENSIONS;
-	private static MethodHandle EXTENSIONS_ACTIVE_EXTENSIONS_GET;
-	private static MethodHandle EXTENSIONS_ACTIVE_EXTENSIONS_SET;
+    private static MethodHandle EXTENSIONS_EXTENSIONS;
+    private static MethodHandle EXTENSIONS_ACTIVE_EXTENSIONS_GET;
+    private static MethodHandle EXTENSIONS_ACTIVE_EXTENSIONS_SET;
 
     private static boolean initialized = false;
 
@@ -65,50 +65,50 @@ public final class MixinHacks {
         }
     }
 
-	public static void registerMixinExtension(IExtension extension) {
+    public static void registerMixinExtension(IExtension extension) {
         tryInit();
-		try {
-			Extensions extensions = (Extensions) ((IMixinTransformer) MixinEnvironment.getDefaultEnvironment().getActiveTransformer())
-					.getExtensions();
-			addExtension((List<IExtension>) EXTENSIONS_EXTENSIONS.invokeExact(extensions), extension);
+        try {
+            Extensions extensions = (Extensions) ((IMixinTransformer) MixinEnvironment.getDefaultEnvironment().getActiveTransformer())
+                    .getExtensions();
+            addExtension((List<IExtension>) EXTENSIONS_EXTENSIONS.invokeExact(extensions), extension);
 
-			List<IExtension> activeExtensions = new ArrayList<>((List<IExtension>) EXTENSIONS_ACTIVE_EXTENSIONS_GET.invokeExact(extensions));
-			addExtension(activeExtensions, extension);
+            List<IExtension> activeExtensions = new ArrayList<>((List<IExtension>) EXTENSIONS_ACTIVE_EXTENSIONS_GET.invokeExact(extensions));
+            addExtension(activeExtensions, extension);
 
-			EXTENSIONS_ACTIVE_EXTENSIONS_SET.invokeExact(extensions, Collections.unmodifiableList(activeExtensions));
-		} catch (Throwable t) {
-			throw new RuntimeException(t);
-		}
-	}
+            EXTENSIONS_ACTIVE_EXTENSIONS_SET.invokeExact(extensions, Collections.unmodifiableList(activeExtensions));
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
+    }
 
-	public static List<Pair<IMixinInfo, ClassNode>> getMixinsFor(ITargetClassContext context) {
+    public static List<Pair<IMixinInfo, ClassNode>> getMixinsFor(ITargetClassContext context) {
         tryInit();
-		List<Pair<IMixinInfo, ClassNode>> result = new ArrayList<>();
-		try {
-			// note: can't use invokeExact here because TargetClassContext is not public
-			for(IMixinInfo mixin : (SortedSet<IMixinInfo>) TARGET_CLASS_CONTEXT_MIXINS.invoke(context)) {
-				ClassNode classNode = (ClassNode) STATE_CLASS_NODE.invoke(MIXIN_INFO_GET_STATE.invoke(mixin));
-				result.add(Pair.of(mixin, classNode));
-			}
-		} catch (Throwable e) {
-			throw new RuntimeException(e);
-		}
-		return result;
-	}
+        List<Pair<IMixinInfo, ClassNode>> result = new ArrayList<>();
+        try {
+            // note: can't use invokeExact here because TargetClassContext is not public
+            for(IMixinInfo mixin : (SortedSet<IMixinInfo>) TARGET_CLASS_CONTEXT_MIXINS.invoke(context)) {
+                ClassNode classNode = (ClassNode) STATE_CLASS_NODE.invoke(MIXIN_INFO_GET_STATE.invoke(mixin));
+                result.add(Pair.of(mixin, classNode));
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
 
-	private static void addExtension(List<IExtension> extensions, IExtension newExtension) {
-		extensions.add(0, newExtension);
+    private static void addExtension(List<IExtension> extensions, IExtension newExtension) {
+        extensions.add(0, newExtension);
 
-		// If this runs before our extensions it will fail since we're not done generating our bytecode.
-		List<IExtension> lateExtensions = new ArrayList<>();
-		for (ListIterator<IExtension> it = extensions.listIterator(); it.hasNext(); ) {
-			IExtension extension = it.next();
-			if (extension instanceof ExtensionCheckClass) {
-				it.remove();
-				lateExtensions.add(extension);
-			}
-		}
-		extensions.addAll(lateExtensions);
-	}
+        // If this runs before our extensions it will fail since we're not done generating our bytecode.
+        List<IExtension> lateExtensions = new ArrayList<>();
+        for (ListIterator<IExtension> it = extensions.listIterator(); it.hasNext(); ) {
+            IExtension extension = it.next();
+            if (extension instanceof ExtensionCheckClass) {
+                it.remove();
+                lateExtensions.add(extension);
+            }
+        }
+        extensions.addAll(lateExtensions);
+    }
 
 }

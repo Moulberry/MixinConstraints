@@ -4,7 +4,7 @@ import net.neoforged.fml.common.Mod;
 
 @Mod("testmod")
 public class TestModNeoForge {
-	public TestModNeoForge() {
-		TestMod.init();
-	}
+    public TestModNeoForge() {
+        TestMod.init();
+    }
 }
