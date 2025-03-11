@@ -14,7 +14,6 @@ public class MixinConstraints {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("mixinconstraints");
     public static final boolean VERBOSE = "true".equals(System.getProperty("mixinconstraints.verbose"));
-    private static Loader loader = null;
 
     public static boolean shouldApplyMixin(String mixinClassName) {
         try {
@@ -55,14 +54,6 @@ public class MixinConstraints {
      */
     @Deprecated
     public static Loader getLoader() {
-        if (loader == null) {
-            loader = findLoader();
-        }
-
-        return loader;
-    }
-
-    private static Loader findLoader() {
         return switch (Abstractions.getLoaderName()) {
             case "Forge" -> Loader.FORGE;
             case "NeoForge" -> Loader.NEOFORGE;
