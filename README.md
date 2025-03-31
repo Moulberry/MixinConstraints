@@ -11,7 +11,7 @@ MixinConstraints is available through Maven Central.
 __Gradle__
 ```groovy
 dependencies {
-    include(implementation("com.moulberry:mixinconstraints:1.0.7"))
+    include(implementation("com.moulberry:mixinconstraints:1.0.8"))
 }
 ```
 
