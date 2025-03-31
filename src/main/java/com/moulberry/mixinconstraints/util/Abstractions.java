@@ -2,8 +2,11 @@ package com.moulberry.mixinconstraints.util;
 
 import com.moulberry.mixinconstraints.MixinConstraints;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Abstractions {
-    private static Abstractions instance = null;
+    private static List<Abstractions> abstractions = null;
 
     private static boolean doesClassExist(String className) {
         try {
@@ -14,48 +17,80 @@ public abstract class Abstractions {
         }
     }
 
-    private static Abstractions getInstance() {
-        if (instance == null) {
+    private static List<Abstractions> getAbstractions() {
+        if (abstractions == null) {
+            abstractions = new ArrayList<>();
+
             String name = System.getProperty("mixinconstraints.abstraction");
-            if (name == null || name.isEmpty()) {
-                if (doesClassExist("net.neoforged.fml.loading.FMLLoader")) {
-                    name = "com.moulberry.mixinconstraints.NeoForgeAbstractionsImpl";
-                } else if (doesClassExist("net.minecraftforge.fml.loading.FMLLoader")) {
-                    name = "com.moulberry.mixinconstraints.ForgeAbstractionsImpl";
-                } else if (doesClassExist("net.fabricmc.loader.api.FabricLoader")) {
-                    name = "com.moulberry.mixinconstraints.FabricAbstractionsImpl";
-                } else {
-                    throw new RuntimeException("Could not determine loader");
+            if (name != null && !name.isBlank()) {
+                Abstractions instance = tryLoadAbstractionsFromClassname(name);
+                if (instance != null) {
+                    abstractions.add(instance);
                 }
             }
-            try {
-                instance = Class.forName(name).asSubclass(Abstractions.class).getDeclaredConstructor().newInstance();
-            } catch (ReflectiveOperationException e) {
-                throw new RuntimeException("Failed to load " + name, e);
+
+            if (doesClassExist("net.neoforged.fml.loading.FMLLoader")) {
+                Abstractions instance = tryLoadAbstractionsFromClassname("com.moulberry.mixinconstraints.NeoForgeAbstractionsImpl");
+                if (instance != null) {
+                    abstractions.add(instance);
+                }
+            }
+            if (doesClassExist("net.minecraftforge.fml.loading.FMLLoader")) {
+                Abstractions instance = tryLoadAbstractionsFromClassname("com.moulberry.mixinconstraints.ForgeAbstractionsImpl");
+                if (instance != null) {
+                    abstractions.add(instance);
+                }
+            }
+            if (doesClassExist("net.fabricmc.loader.api.FabricLoader")) {
+                Abstractions instance = tryLoadAbstractionsFromClassname("com.moulberry.mixinconstraints.FabricAbstractionsImpl");
+                if (instance != null) {
+                    abstractions.add(instance);
+                }
+            }
+
+            if (abstractions.isEmpty()) {
+                throw new RuntimeException("Could not determine loader");
             }
         }
-        return instance;
+        return abstractions;
+    }
+
+    private static Abstractions tryLoadAbstractionsFromClassname(String name) {
+        try {
+            return Class.forName(name).asSubclass(Abstractions.class).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            MixinConstraints.LOGGER.error("Failed to load {}", name, e);
+            return null;
+        }
     }
 
     public static boolean isDevelopmentEnvironment() {
-        Abstractions instance = getInstance();
-        return instance.isDevEnvironment();
+        for (Abstractions instance : getAbstractions()) {
+            if (instance.isDevEnvironment()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean isModLoadedWithinVersion(String modId, String minVersion, String maxVersion) {
-        Abstractions instance = getInstance();
-
-        String version = instance.getModVersion(modId);
-        if (version == null) {
-            return false;
+        for (Abstractions instance : getAbstractions()) {
+            String version = instance.getModVersion(modId);
+            if (version == null) {
+                continue;
+            }
+            if (instance.isVersionInRange(version, minVersion, maxVersion)) {
+                return true;
+            }
         }
-
-        return instance.isVersionInRange(version, minVersion, maxVersion);
+        return false;
     }
 
     public static String getLoaderName() {
-        Abstractions instance = getInstance();
-        return instance.getPlatformName();
+        for (Abstractions instance : getAbstractions()) {
+            return instance.getPlatformName();
+        }
+        throw new RuntimeException("Could not determine loader");
     }
 
     protected abstract boolean isDevEnvironment();
