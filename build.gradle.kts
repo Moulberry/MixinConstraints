@@ -8,7 +8,7 @@ plugins {
     id("com.vanniktech.maven.publish") version("0.28.0") // `maven-publish` doesn't support new maven central
 }
 
-version = "1.0.8"
+version = "1.0.9"
 group = "com.moulberry.mixinconstraints"
 
 idea.module.isDownloadSources = true
@@ -56,6 +56,12 @@ tasks.jar {
     from(fabric.output)
     from(forge.output)
     from(neoforge.output)
+    manifest {
+        attributes(
+            "FMLModType" to "GAMELIBRARY",
+            "Automatic-Module-Name" to "MixinConstraints"
+        )
+    }
 }
 
 tasks.register<Jar>("sourcesJar") {
