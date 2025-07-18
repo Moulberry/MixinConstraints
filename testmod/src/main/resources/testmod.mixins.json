@@ -9,6 +9,7 @@
   ],
   "client": [
     "ExampleMixin",
+    "TestDuplicateAnnotation",
     "TestIfModAbsentFalse",
     "TestIfModAbsentTrue",
     "TestIfModLoadedFalse",
