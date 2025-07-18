@@ -13,7 +13,8 @@
     "TestIfModAbsentFalse",
     "TestIfModAbsentTrue",
     "TestIfModLoadedFalse",
-    "TestIfModLoadedTrue"
+    "TestIfModLoadedTrue",
+    "TestInclusive"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -15,5 +15,7 @@ public @interface IfModLoaded {
     String[] aliases() default {};
     String minVersion() default "";
     String maxVersion() default "";
+    boolean minInclusive() default true;
+    boolean maxInclusive() default true;
 
 }

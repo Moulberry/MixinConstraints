@@ -15,5 +15,7 @@ public @interface IfModAbsent {
     String[] aliases() default {};
     String minVersion() default "";
     String maxVersion() default "";
+    boolean minInclusive() default true;
+    boolean maxInclusive() default true;
 
 }

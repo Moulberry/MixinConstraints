@@ -73,13 +73,13 @@ public abstract class Abstractions {
         return false;
     }
 
-    public static boolean isModLoadedWithinVersion(String modId, String minVersion, String maxVersion) {
+    public static boolean isModLoadedWithinVersion(String modId, String minVersion, String maxVersion, boolean minInclusive, boolean maxInclusive) {
         for (Abstractions instance : getAbstractions()) {
             String version = instance.getModVersion(modId);
             if (version == null) {
                 continue;
             }
-            if (instance.isVersionInRange(version, minVersion, maxVersion)) {
+            if (instance.isVersionInRange(version, minVersion, maxVersion, minInclusive, maxInclusive)) {
                 return true;
             }
         }
@@ -95,6 +95,6 @@ public abstract class Abstractions {
 
     protected abstract boolean isDevEnvironment();
     protected abstract String getModVersion(String modId);
-    protected abstract boolean isVersionInRange(String version, String minVersion, String maxVersion);
+    protected abstract boolean isVersionInRange(String version, String minVersion, String maxVersion, boolean minInclusive, boolean maxInclusive);
     protected abstract String getPlatformName();
 }

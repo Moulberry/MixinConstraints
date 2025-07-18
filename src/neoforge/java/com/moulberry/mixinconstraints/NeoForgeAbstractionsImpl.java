@@ -21,7 +21,7 @@ public class NeoForgeAbstractionsImpl extends Abstractions {
     }
 
     @Override
-    protected boolean isVersionInRange(String version, String minVersion, String maxVersion) {
+    protected boolean isVersionInRange(String version, String minVersion, String maxVersion, boolean minInclusive, boolean maxInclusive) {
         ArtifactVersion currentVersion = new DefaultArtifactVersion(version);
         ArtifactVersion min = minVersion == null ? null : new DefaultArtifactVersion(minVersion);
         ArtifactVersion max = maxVersion == null ? null : new DefaultArtifactVersion(maxVersion);
@@ -30,7 +30,7 @@ public class NeoForgeAbstractionsImpl extends Abstractions {
             throw new IllegalArgumentException("minVersion (" + minVersion + ") is greater than maxVersion (" + maxVersion + ")");
         }
 
-        return new Restriction(min, true, max, true).containsVersion(currentVersion);
+        return new Restriction(min, minInclusive, max, maxInclusive).containsVersion(currentVersion);
     }
 
     @Override

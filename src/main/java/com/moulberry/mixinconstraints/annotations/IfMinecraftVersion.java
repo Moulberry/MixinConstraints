@@ -13,5 +13,7 @@ public @interface IfMinecraftVersion {
     String minVersion() default "";
     String maxVersion() default "";
     boolean negate() default false;
+    boolean minInclusive() default true;
+    boolean maxInclusive() default true;
 
 }
