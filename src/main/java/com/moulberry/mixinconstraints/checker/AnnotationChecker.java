@@ -16,13 +16,14 @@ public class AnnotationChecker {
 
     private static final String IF_MOD_LOADED_DESC = Type.getDescriptor(IfModLoaded.class);
     private static final String IF_MOD_LOADEDS_DESC = Type.getDescriptor(IfModLoadeds.class);
-    private static final String IS_MOD_ABSENT_DESC = Type.getDescriptor(IfModAbsent.class);
+    private static final String IF_MOD_ABSENT_DESC = Type.getDescriptor(IfModAbsent.class);
     private static final String IF_MOD_ABSENTS_DESC = Type.getDescriptor(IfModAbsents.class);
     private static final String IF_DEV_ENVIRONMENT_DESC = Type.getDescriptor(IfDevEnvironment.class);
     private static final String IF_MINECRAFT_VERSION_DESC = Type.getDescriptor(IfMinecraftVersion.class);
 
     public static boolean isConstraintAnnotationNode(AnnotationNode node) {
-        return IF_MOD_LOADED_DESC.equals(node.desc) || IS_MOD_ABSENT_DESC.equals(node.desc) ||
+        return IF_MOD_LOADED_DESC.equals(node.desc) || IF_MOD_LOADEDS_DESC.equals(node.desc) ||
+            IF_MOD_ABSENT_DESC.equals(node.desc) || IF_MOD_ABSENTS_DESC.equals(node.desc) ||
             IF_DEV_ENVIRONMENT_DESC.equals(node.desc) || IF_MINECRAFT_VERSION_DESC.equals(node.desc);
     }
 
@@ -54,7 +55,7 @@ public class AnnotationChecker {
             }
 
             return pass;
-        } else if (IS_MOD_ABSENT_DESC.equals(node.desc)) {
+        } else if (IF_MOD_ABSENT_DESC.equals(node.desc)) {
             String value = getAnnotationValue(node, "value", "");
             if (value.isEmpty()) throw new IllegalArgumentException("modid must not be empty");
 
