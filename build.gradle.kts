@@ -41,8 +41,8 @@ val neoforge: SourceSet by sourceSets.creating {
 dependencies {
     compileOnly("org.spongepowered:mixin:0.8.5")
     compileOnly("org.ow2.asm:asm-tree:9.7")
-    implementation("org.slf4j:slf4j-api:2.0.12")
-    implementation("org.jetbrains:annotations:24.1.0")
+    compileOnly("org.slf4j:slf4j-api:2.0.12")
+    compileOnly("org.jetbrains:annotations:24.1.0")
 
     "fabricImplementation"("net.fabricmc:fabric-loader:0.15.0")
 
